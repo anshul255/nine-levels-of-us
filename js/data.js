@@ -23,11 +23,11 @@ const DATA = {
     diwali3:    { src: "photos/IMG_2037.jpg", cap: "Mirror check: passed" },
     dateNight1: { src: "photos/IMG_2072.jpg", cap: "Nov 2 · Sequins + hoodie = perfect balance ⚖️" },
     dateNight2: { src: "photos/IMG_2074.jpg", cap: "Date night, dressed by two different stylists" },
-    earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · Winter shopping — 10/10 would recommend these hats" },
+    earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · Winter shopping — one hat, one pair of earmuffs, zero regrets" },
     winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago winter tried. We won. ❄️" },
     neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Glow crew of two 💡" },
     nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · Ending the year under a giant ornament 🎆" },
-    lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour at the lakefill 🌅" },
+    lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour at the Lakefill 🌅" },
     lakeside1:  { src: "photos/IMG_4629.jpg", cap: "Jun 5 · Lake days with you >" },
     lakeside2:  { src: "photos/IMG_4645.jpg", cap: "Same lake, favourite company" },
     beach1:     { src: "photos/IMG_4653.jpg", cap: "Jun 6 · Beach day ☀️" },
@@ -44,7 +44,7 @@ const DATA = {
     {
       month: "Late October '25", title: "It Begins",
       game: "hearts",
-      intro: "Two players joined the game. Tap all 9 hearts — one for every month together.",
+      intro: "Two players joined the game. Tap all nine hearts — one for every month together.",
       reveals: ["festive1"]
     },
     {
@@ -84,7 +84,7 @@ const DATA = {
       reveals: ["nye"]
     },
     {
-      month: "May – June '26", title: "Golden Hour",
+      month: "May–June '26", title: "Golden Hour",
       game: "puzzle",
       intro: "Summer finally showed up. Some evenings are worth putting back together, piece by piece.",
       reveals: ["lakefill1", "lakeside2", "beach2"]
@@ -115,7 +115,7 @@ const DATA = {
       q: "Where did Player 2 just earn her MBA?",
       options: ["Kellogg School of Management", "Hogwarts School of Business", "The University of Winning Arguments"],
       correct: 0,
-      right: "Correct! Northwestern | Kellogg, Class of 2026 💜",
+      right: "Correct! Northwestern Kellogg, Class of 2026 💜",
       wrong: "Tempting… but try again 😄"
     },
     {

@@ -12,7 +12,8 @@
     unlocked: 0,           // highest level index reachable
     hearts: 0,             // hearts collected across games
     current: null,         // active level index
-    cleanup: null          // teardown fn for the active game
+    cleanup: null,         // teardown fn for the active game
+    token: 0               // bumped on any navigation; stale deferred callbacks check it
   };
 
   /* ---------- persistence ---------- */
@@ -198,6 +199,8 @@
       }
     }
     function loop() {
+      // if the timer starved (backgrounded), jump forward instead of burst-scheduling the past
+      if (nextTime < ctx.currentTime) nextTime = ctx.currentTime + 0.05;
       // 1.4s lookahead so playback survives background-tab timer throttling
       while (nextTime < ctx.currentTime + 1.4) {
         scheduleStep(step, nextTime);
@@ -205,19 +208,26 @@
         nextTime += STEP;
       }
     }
+    // iOS suspends/interrupts the context on backgrounding, calls, Siri — revive it
+    function revive() {
+      if (ctx && ctx.state !== "running") { try { ctx.resume(); } catch (e) {} }
+    }
     function start() {
       ensure();
-      if (ctx.state === "suspended") ctx.resume();
+      revive();
       if (started) return;
       started = true;
       nextTime = ctx.currentTime + 0.1;
       timer = setInterval(loop, 250);
       loop();
       updateBtn();
+      document.addEventListener("visibilitychange", () => { if (!document.hidden && !muted) revive(); });
+      document.addEventListener("pointerdown", () => { if (!muted) revive(); }, { passive: true });
     }
     function toggle() {
       if (!started) { start(); return; }
       muted = !muted;
+      if (!muted) revive();
       master.gain.setTargetAtTime(muted ? 0 : VOL, ctx.currentTime, 0.05);
       updateBtn();
     }
@@ -284,6 +294,7 @@
   function openLevel(i) {
     ping(740);
     if (state.cleanup) { state.cleanup(); state.cleanup = null; }
+    state.token++;
     state.current = i;
     const lv = DATA.levels[i];
     $("#levelMonth").textContent = lv.month.toUpperCase();
@@ -296,6 +307,7 @@
   }
 
   function completeLevel(i) {
+    state.token++;
     if (state.cleanup) { state.cleanup(); state.cleanup = null; }
     const lv = DATA.levels[i];
     if (i === state.unlocked) state.unlocked = i + 1;
@@ -343,7 +355,8 @@
   }
 
   /* ----- 1. tap the hearts ----- */
-  GAMES.hearts = () => {
+  GAMES.hearts = (i) => {
+    const tok = state.token;
     const MONTHS = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"];
     const area = $("#gameArea");
     area.innerHTML = `
@@ -371,14 +384,15 @@
         field.appendChild(lbl);
         popped++;
         $("#heartMeter").style.width = `${(popped / 9) * 100}%`;
-        if (popped === 9) setTimeout(() => completeLevel(state.current), 550);
+        if (popped === 9) setTimeout(() => { if (tok === state.token) completeLevel(i); }, 550);
       });
       field.appendChild(b);
     });
   };
 
   /* ----- 2. memory match ----- */
-  GAMES.match = () => {
+  GAMES.match = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     area.innerHTML = `<div id="matchGrid"></div>`;
     const grid = $("#matchGrid");
@@ -402,14 +416,16 @@
           const [a, c] = open;
           if (a.dataset.key === c.dataset.key) {
             setTimeout(() => {
+              if (tok !== state.token) return;
               a.classList.add("matched"); c.classList.add("matched");
               ping(1000); addHeart();
               matched++; open = []; lock = false;
               $("#gameMsg").textContent = matched === 6 ? "" : `${matched}/6 pairs found`;
-              if (matched === 6) setTimeout(() => completeLevel(state.current), 500);
+              if (matched === 6) setTimeout(() => { if (tok === state.token) completeLevel(i); }, 500);
             }, 350);
           } else {
             setTimeout(() => {
+              if (tok !== state.token) return;
               a.classList.remove("flipped"); c.classList.remove("flipped");
               open = []; lock = false;
             }, 750);
@@ -421,7 +437,8 @@
   };
 
   /* ----- 3. word scramble ----- */
-  GAMES.scramble = () => {
+  GAMES.scramble = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     let round = 0;
     function renderRound() {
@@ -458,11 +475,12 @@
               ping(1100); addHeart();
               $("#gameMsg").textContent = "✓ " + word;
               round++;
-              if (round < DATA.scramble.length) setTimeout(() => { $("#gameMsg").textContent = ""; renderRound(); }, 800);
-              else setTimeout(() => completeLevel(state.current), 700);
+              if (round < DATA.scramble.length) setTimeout(() => { if (tok !== state.token) return; $("#gameMsg").textContent = ""; renderRound(); }, 800);
+              else setTimeout(() => { if (tok === state.token) completeLevel(i); }, 700);
             } else {
               $("#gameMsg").textContent = "Not quite — try again!";
               setTimeout(() => {
+                if (tok !== state.token) return;
                 filled.forEach(f => f.btn.classList.remove("used"));
                 [...slots.children].forEach(s => { s.textContent = ""; s.classList.remove("filled"); });
                 filled = [];
@@ -478,7 +496,8 @@
   };
 
   /* ----- 4. quiz ----- */
-  GAMES.quiz = () => {
+  GAMES.quiz = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     let qi = 0;
     function renderQ() {
@@ -497,9 +516,10 @@
             area.querySelectorAll(".quiz-opt").forEach(o => o.disabled = true);
             qi++;
             setTimeout(() => {
+              if (tok !== state.token) return;
               $("#gameMsg").textContent = "";
               if (qi < DATA.quiz.length) renderQ();
-              else completeLevel(state.current);
+              else completeLevel(i);
             }, 1300);
           } else {
             b.classList.add("wrong");
@@ -515,7 +535,8 @@
   };
 
   /* ----- 5. scratch the frost ----- */
-  GAMES.scratch = () => {
+  GAMES.scratch = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     const photo = DATA.photos[DATA.scratchCard];
     area.innerHTML = `
@@ -538,10 +559,26 @@
       g.addColorStop(0, "#cfe6f5"); g.addColorStop(0.5, "#eef7fd"); g.addColorStop(1, "#b8d9ef");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(90,120,160,0.55)";
-      ctx.font = `${Math.max(16, canvas.width / 14)}px Caveat, cursive`;
-      ctx.textAlign = "center";
-      ctx.fillText("scratch here ❄", canvas.width / 2, canvas.height / 2);
+      const drawHint = () => {
+        if (done || cells.size) return;               // don't redraw over scratches
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = "rgba(90,120,160,0.55)";
+        ctx.font = `${Math.max(16, canvas.width / 14)}px Caveat, cursive`;
+        ctx.textAlign = "center";
+        ctx.fillText("scratch here ❄", canvas.width / 2, canvas.height / 2);
+        ctx.globalCompositeOperation = "destination-out";
+      };
+      drawHint();
+      // re-render once the handwritten webfont arrives (canvas text doesn't auto-repaint)
+      if (document.fonts && document.fonts.load) {
+        document.fonts.load("20px Caveat").then(() => {
+          if (tok !== state.token || done || cells.size) return;
+          ctx.globalCompositeOperation = "source-over";
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          drawHint();
+        }).catch(() => {});
+      }
       ctx.globalCompositeOperation = "destination-out";
     }
     if (img.complete && img.naturalWidth) setup(); else img.addEventListener("load", setup);
@@ -551,7 +588,7 @@
       canvas.style.transition = "opacity 0.8s ease";
       canvas.style.opacity = "0";
       ping(1050); addHeart();
-      setTimeout(() => completeLevel(state.current), 1100);
+      setTimeout(() => { if (tok === state.token) completeLevel(i); }, 1100);
     }
     let scratching = false;
     function scratch(e) {
@@ -584,13 +621,16 @@
   };
 
   /* ----- 6. catch the hearts ----- */
-  GAMES.catch = () => {
+  GAMES.catch = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     area.innerHTML = `
       <div class="meter"><div id="catchMeter"></div></div>
       <canvas id="catchCanvas"></canvas>`;
     const canvas = $("#catchCanvas"), ctx = canvas.getContext("2d");
-    const W = Math.min(380, area.clientWidth || 340), H = 420;
+    const W = Math.min(380, area.clientWidth || 340);
+    // fit the play field to the space below the header so the basket stays on screen
+    const H = Math.max(280, Math.min(420, innerHeight - canvas.getBoundingClientRect().top - 90));
     canvas.width = W; canvas.height = H;
     const GOAL = 12;
     let caught = 0, drops = [], raf = null, over = false;
@@ -631,7 +671,7 @@
         over = true;
         clearInterval(spawnTimer);
         cancelAnimationFrame(raf);
-        setTimeout(() => completeLevel(state.current), 400);
+        setTimeout(() => { if (tok === state.token) completeLevel(i); }, 400);
         return;
       }
       raf = requestAnimationFrame(draw);
@@ -651,7 +691,8 @@
   };
 
   /* ----- 7. NYE countdown ----- */
-  GAMES.countdown = () => {
+  GAMES.countdown = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     area.innerHTML = `
       <div class="meter"><div id="cdMeter"></div></div>
@@ -684,7 +725,7 @@
         if (tapped === 9) {
           $("#gameMsg").textContent = "🎉 HAPPY NEW YEAR! 🎉";
           confetti.burst(150);
-          setTimeout(() => completeLevel(state.current), 1200);
+          setTimeout(() => { if (tok === state.token) completeLevel(i); }, 1200);
         }
       });
       field.appendChild(b);
@@ -693,7 +734,8 @@
   };
 
   /* ----- 8. tile puzzle (tap two tiles to swap) ----- */
-  GAMES.puzzle = () => {
+  GAMES.puzzle = (i) => {
+    const tok = state.token;
     const area = $("#gameArea");
     const photo = DATA.photos[DATA.puzzleImage];
     area.innerHTML = `
@@ -728,11 +770,11 @@
             [order[selected], order[cellIdx]] = [order[cellIdx], order[selected]];
             selected = null;
             render();
-            if (order.every((v, i) => v === i)) {
+            if (order.every((v, idx2) => v === idx2)) {
               solvedFlag = true;
               ping(1150); addHeart(3);
               $("#gameMsg").textContent = "Perfect. Just like that evening. 🌅";
-              setTimeout(() => completeLevel(state.current), 900);
+              setTimeout(() => { if (tok === state.token) completeLevel(i); }, 900);
             }
           }
         });
@@ -743,7 +785,7 @@
   };
 
   /* ----- 9. graduation story ----- */
-  GAMES.story = () => {
+  GAMES.story = (i) => {
     const area = $("#gameArea");
     let idx = 0;
     area.innerHTML = `
@@ -769,7 +811,7 @@
       ping(800);
       confetti.burst(50, { x: e.clientX || innerWidth / 2, y: e.clientY || innerHeight / 2 });
       if (idx < DATA.story.length - 1) { idx++; addHeart(); render(); }
-      else { addHeart(2); completeLevel(state.current); }
+      else { addHeart(2); completeLevel(i); }
     });
     render();
   };
@@ -777,15 +819,24 @@
   /* ----- 10. finale ----- */
   GAMES.finale = () => {
     show("#finale");
+    // reset so re-entering the finale never stacks listeners or stale state
+    $("#bossArea").style.display = "";
+    $("#afterYes").classList.remove("active");
+    $("#gameMsg2").textContent = "";
+    const oldYes = $("#yesBtn"), oldNo = $("#noBtn");
+    const yesBtn = oldYes.cloneNode(true), noBtn = oldNo.cloneNode(true);
+    oldYes.replaceWith(yesBtn); oldNo.replaceWith(noBtn);
+    noBtn.removeAttribute("style");
+
     const row = $("#finale .beach-row");
     row.innerHTML = "";
     DATA.finale.beach.forEach(k => row.appendChild(polaroid(k)));
     $("#bossQuestion").textContent = DATA.finale.question;
-    $("#yesBtn").textContent = DATA.finale.yes;
-    $("#noBtn").textContent = DATA.finale.no;
+    yesBtn.textContent = DATA.finale.yes;
+    noBtn.textContent = DATA.finale.no;
 
     let dodges = 0;
-    const zone = $("#answerZone"), noBtn = $("#noBtn");
+    const zone = $("#answerZone");
     function dodge() {
       dodges++;
       ping(300);
@@ -799,10 +850,11 @@
       if (dodges >= 6) { noBtn.style.opacity = "0"; noBtn.style.pointerEvents = "none"; }
       $("#gameMsg2").textContent = ["Nice try 😌", "The button disagrees", "It's shy", "Physically impossible", "Just accept fate 💘", "…and it's gone"][Math.min(dodges - 1, 5)];
     }
-    noBtn.addEventListener("pointerenter", dodge);
-    noBtn.addEventListener("click", dodge);
+    // mouse chases the cursor; touch dodges once per deliberate tap
+    noBtn.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") dodge(); });
+    noBtn.addEventListener("click", (e) => { if (e.pointerType !== "mouse" || e.detail > 0) dodge(); });
 
-    $("#yesBtn").addEventListener("click", () => {
+    yesBtn.addEventListener("click", () => {
       state.unlocked = DATA.levels.length; save(); updateTopbar();
       confetti.burst(220);
       setTimeout(() => confetti.burst(180), 600);
@@ -837,6 +889,7 @@
         im.src = p.src; im.alt = ""; im.loading = "lazy";
         im.addEventListener("click", () => {
           $("#lightbox img").src = p.src;
+          $("#lightboxCap").textContent = p.cap;
           $("#lightbox").classList.add("active");
         });
         g.appendChild(im);
@@ -854,6 +907,7 @@
     $("#musicBtn").addEventListener("click", music.toggle);
     $("#skipBtn").addEventListener("click", skipBtnHandler);
     $("#backBtn").addEventListener("click", () => {
+      state.token++;
       if (state.cleanup) { state.cleanup(); state.cleanup = null; }
       show("#map"); renderMap();
     });
