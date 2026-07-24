@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Player 2 Forever — Anshul ♥ Preksha</title>
+  <meta name="description" content="A tiny arcade celebrating nine months of co-op mode.">
+  <meta property="og:title" content="Player 2 Forever 💘">
+  <meta property="og:description" content="Press start, Player 2. Nine months of memories are waiting.">
+  <meta property="og:image" content="photos/IMG_4702.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💘</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;500;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <canvas id="confetti"></canvas>
+
+  <div id="topbar">
+    <span class="pixel" id="levelCount">LV 1/10</span>
+    <span class="pixel" id="heartCount">♥ 0</span>
+    <button id="musicBtn" title="music">🔈</button>
+  </div>
+
+  <div id="app">
+
+    <!-- BOOT -->
+    <section id="boot" class="screen active">
+      <div class="logo-heart">💘</div>
+      <h1 class="pixel">PLAYER 2<br>FOREVER</h1>
+      <h2 class="pixel">NINE MONTHS OF CO-OP MODE</h2>
+      <p class="players pixel"><span id="p1name">P1</span> ♥ <span id="p2name">P2</span></p>
+      <p id="dayCounter" class="hand"></p>
+      <button id="pressStart" class="btn pixel" style="font-size:13px">▶ PRESS START</button>
+      <p style="font-size:13px;opacity:0.55">best played with sound on 🎧</p>
+    </section>
+
+    <!-- LEVEL MAP -->
+    <section id="map" class="screen">
+      <h2 class="pixel">SELECT LEVEL</h2>
+      <p class="sub hand" style="font-size:19px">nine months, nine levels… and one final boss 👾</p>
+      <div id="path"></div>
+    </section>
+
+    <!-- LEVEL -->
+    <section id="level" class="screen">
+      <header>
+        <div class="month-tag pixel" id="levelMonth"></div>
+        <h2 class="pixel" id="levelTitle"></h2>
+        <p class="intro" id="levelIntro"></p>
+      </header>
+      <div id="gameArea"></div>
+      <p class="game-msg" id="gameMsg"></p>
+      <div id="levelFooter">
+        <button id="backBtn" class="btn ghost">← map</button>
+        <button id="skipBtn" class="btn ghost">skip →</button>
+      </div>
+    </section>
+
+    <!-- FINALE -->
+    <section id="finale" class="screen">
+      <div id="bossArea">
+        <h2 class="pixel" style="color:var(--gold);font-size:14px;margin:10px 0 18px">⚠ FINAL BOSS ⚠</h2>
+        <div class="beach-row"></div>
+        <p id="bossQuestion"></p>
+        <p class="game-msg" id="gameMsg2"></p>
+        <div id="answerZone">
+          <button id="yesBtn" class="btn"></button>
+          <button id="noBtn"></button>
+        </div>
+      </div>
+
+      <div id="afterYes">
+        <h2 class="pixel" style="color:var(--gold);font-size:15px">💾 GAME COMPLETE 💾</h2>
+        <p class="hand" style="font-size:24px;color:var(--pink2)">…but our save file never ends</p>
+
+        <div id="letter"></div>
+
+        <div class="stats">
+          <div class="stat"><div class="num" id="statDays">–</div><div class="lbl">days together</div></div>
+          <div class="stat"><div class="num" id="statHearts">–</div><div class="lbl">hearts collected</div></div>
+          <div class="stat"><div class="num" id="statLevels">–</div><div class="lbl">levels cleared</div></div>
+          <div class="stat"><div class="num" id="statPhotos">–</div><div class="lbl">memories unlocked</div></div>
+        </div>
+
+        <p class="pixel section-title">BONUS SCENE</p>
+        <video id="finaleVideo" controls playsinline preload="metadata"></video>
+        <p class="hand" id="videoCap" style="font-size:20px;color:var(--pink2)"></p>
+
+        <p class="pixel section-title">MEMORY VAULT</p>
+        <div id="gallery"></div>
+
+        <button id="replayBtn" class="btn gold">↻ NEW GAME+ (replay)</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- REVEAL OVERLAY -->
+  <div id="reveal">
+    <p class="pixel">★ MEMORY UNLOCKED ★</p>
+    <div id="revealCards"></div>
+    <button id="revealDone" class="btn gold">Collect ♥</button>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox"><img src="" alt=""></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
