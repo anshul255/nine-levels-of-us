@@ -163,7 +163,7 @@ const DATA = {
   // Final boss.
   finale: {
     beach: ["beach1", "beach2"],
-    question: "Preksha, do you know how lucky I am to have you in my life?",
+    question: "Preksha, you're the best thing that's happened to me these nine months. Agreed?",
     yes: "YES ♥",
     no: "no",
     bonusScenes: [
