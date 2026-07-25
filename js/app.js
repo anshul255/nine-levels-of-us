@@ -375,6 +375,25 @@
 
   function addHeart(n = 1) { state.hearts += n; save(); updateTopbar(); }
 
+  /* ---------- lightbox with prev/next browsing ---------- */
+  const lightbox = {
+    list: [], idx: 0,
+    open(i2) {
+      if (!this.list.length) return;
+      this.idx = ((i2 % this.list.length) + this.list.length) % this.list.length;
+      const p = this.list[this.idx];
+      $("#lightbox img").src = p.src;
+      $("#lightboxCap").textContent = p.cap;
+      $("#lightbox").classList.add("active");
+      // warm neighbours so arrows feel instant
+      warm([this.list[(this.idx + 1) % this.list.length].src,
+            this.list[(this.idx - 1 + this.list.length) % this.list.length].src]);
+    },
+    next() { ping(700); this.open(this.idx + 1); },
+    prev() { ping(700); this.open(this.idx - 1); },
+    close() { $("#lightbox").classList.remove("active"); }
+  };
+
   /* ---------- image preloading ---------- */
   const preloadedSrcs = new Set();
   function warm(srcs) {
@@ -1068,14 +1087,11 @@
       // gallery
       const g = $("#gallery");
       g.innerHTML = "";
-      Object.values(DATA.photos).forEach(p => {
+      lightbox.list = Object.values(DATA.photos);
+      lightbox.list.forEach((p, pi) => {
         const im = document.createElement("img");
         im.src = p.src; im.alt = ""; im.loading = "lazy";
-        im.addEventListener("click", () => {
-          $("#lightbox img").src = p.src;
-          $("#lightboxCap").textContent = p.cap;
-          $("#lightbox").classList.add("active");
-        });
+        im.addEventListener("click", () => lightbox.open(pi));
         g.appendChild(im);
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1099,7 +1115,25 @@
       $("#reveal").classList.remove("active");
       show("#map"); renderMap();
     });
-    $("#lightbox").addEventListener("click", () => $("#lightbox").classList.remove("active"));
+    // lightbox: arrows, backdrop close, keyboard, swipe
+    $("#lbPrev").addEventListener("click", (e) => { e.stopPropagation(); lightbox.prev(); });
+    $("#lbNext").addEventListener("click", (e) => { e.stopPropagation(); lightbox.next(); });
+    $("#lbClose").addEventListener("click", (e) => { e.stopPropagation(); lightbox.close(); });
+    let lbSwiped = false, lbX = null;
+    $("#lightbox").addEventListener("click", () => { if (!lbSwiped) lightbox.close(); lbSwiped = false; });
+    $("#lightbox").addEventListener("pointerdown", (e) => { lbX = e.clientX; });
+    $("#lightbox").addEventListener("pointerup", (e) => {
+      if (lbX === null) return;
+      const dx = e.clientX - lbX;
+      lbX = null;
+      if (Math.abs(dx) > 40) { lbSwiped = true; dx < 0 ? lightbox.next() : lightbox.prev(); }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (!$("#lightbox").classList.contains("active")) return;
+      if (e.key === "ArrowRight") lightbox.next();
+      else if (e.key === "ArrowLeft") lightbox.prev();
+      else if (e.key === "Escape") lightbox.close();
+    });
     $("#replayBtn").addEventListener("click", () => {
       try { localStorage.removeItem(STORE_KEY); } catch (e) {}
       location.reload();

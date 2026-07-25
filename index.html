@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;500;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
   <canvas id="stars"></canvas>
@@ -107,9 +107,15 @@
   </div>
 
   <!-- LIGHTBOX -->
-  <div id="lightbox"><img src="" alt=""><p class="hand" id="lightboxCap"></p></div>
+  <div id="lightbox">
+    <button id="lbPrev" class="lb-arrow" aria-label="previous photo">‹</button>
+    <img src="" alt="">
+    <button id="lbNext" class="lb-arrow" aria-label="next photo">›</button>
+    <p class="hand" id="lightboxCap"></p>
+    <button id="lbClose" aria-label="close">✕</button>
+  </div>
 
-  <script src="js/data.js?v=13"></script>
-  <script src="js/app.js?v=13"></script>
+  <script src="js/data.js?v=14"></script>
+  <script src="js/app.js?v=14"></script>
 </body>
 </html>
