@@ -14,10 +14,16 @@ const DATA = {
   // Photo captions — path is relative to the site root.
   photos: {
     festive1:   { src: "photos/IMG_1995.jpg", cap: "Oct 29 · The lights were beautiful. I was looking at you. ✨" },
-    hallow1:    { src: "photos/IMG_2003.jpg", cap: "Oct 31 · Dressed in black, falling anyway 🖤" },
+    hallowPre:  { src: "photos/IMG_2002.jpg", cap: "Oct 31 · Ready for mischief 🖤" },
+    hallow1:    { src: "photos/IMG_2003.jpg", cap: "Dressed in black, falling anyway" },
+    hallowWink: { src: "photos/IMG_2005.jpg", cap: "The wink that keeps winning me over 😜" },
+    hallowEyes: { src: "photos/IMG_2006.jpg", cap: "Scary? No. Adorable? Extremely." },
+    hallowSoft: { src: "photos/IMG_2007.jpg", cap: "Before the scars: just us and the skyline" },
     hallow2:    { src: "photos/IMG_2008.jpg", cap: "Blurry photo, crystal-clear feelings" },
     hallow3:    { src: "photos/IMG_2009.jpg", cap: "Halloween night, holding on tight" },
+    hallowScars:{ src: "photos/IMG_2015.jpg", cap: "Scars on, chaos loading…" },
     halloween:  { src: "photos/IMG_2020.jpg", cap: "Our first Halloween — fake scars, real butterflies 🎃" },
+    hallowParty:{ src: "photos/IMG_2022.jpg", cap: "A whole party around us, my whole world right here 💜" },
     diwali1:    { src: "photos/IMG_2028.jpg", cap: "Nov 1 · New festival, same favourite person 🪔" },
     diwali2:    { src: "photos/IMG_2030.jpg", cap: "Every diya in the city was jealous of your glow 💚" },
     diwali3:    { src: "photos/IMG_2037.jpg", cap: "The mirror agreed: we make sense together" },
@@ -57,8 +63,8 @@ const DATA = {
     {
       month: "October 31 '25", title: "Trick or Treat",
       game: "match",
-      intro: "Our very first Halloween. Match the pairs to piece the night back together.",
-      reveals: ["halloween", "hallow1", "hallow3"]
+      intro: "Our very first Halloween — the black outfits, the goofy faces, the fake scars, the party. Match the pairs to piece the night back together.",
+      reveals: ["halloween", "hallowParty", "hallow2"]
     },
     {
       month: "November 1 '25", title: "Desi Hearts",
@@ -110,8 +116,8 @@ const DATA = {
     }
   ],
 
-  // Level 2 — memory match uses these photo faces (6 pairs).
-  matchFaces: ["festive1", "halloween", "hallow1", "winter", "neon", "nye"],
+  // Level 2 — memory match faces: six distinct moments, all from Halloween night.
+  matchFaces: ["hallowPre", "hallowWink", "hallowEyes", "hallowScars", "halloween", "hallowParty"],
 
   // Level 5 — the scratch card image (frost-covered surprise).
   scratchCard: "earmuffs",
