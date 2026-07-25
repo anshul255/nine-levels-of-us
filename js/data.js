@@ -31,7 +31,7 @@ const DATA = {
     bday2: { src: "photos/IMG_2074.jpg", cap: "Your first birthday with me — celebrating you came easy 🎂" },
     earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · One silly hat, one pair of earmuffs, zero regrets" },
     winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago turned cold. You kept me warm. ❄️" },
-    neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Even under blacklight, you glowed brightest 💡" },
+    neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Neon paint, silly grins, one unforgettable night 💡" },
     bdaySurprise: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · My birthday — you secretly planned it all. Tiara mandatory. 👑" },
     nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · The year ended exactly where I belonged — next to you 🎆" },
     nye2:       { src: "photos/IMG_2643.jpg", cap: "One ornament, two of us ✨" },
@@ -140,7 +140,7 @@ const DATA = {
     },
     {
       q: "What have these nine months really been?",
-      options: ["The happiest of my life", "The easiest yes I've ever said", "Just the beginning"],
+      options: ["The happiest of my life", "The easiest yes I've ever said", "Nine months I'll never forget"],
       correct: -1,
       right: "Correct, correct, and correct. ✨",
       wrong: ""
