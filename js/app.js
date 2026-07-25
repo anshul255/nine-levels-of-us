@@ -327,10 +327,15 @@
     $("#reveal").classList.add("active");
   }
   function polaroid(key) {
-    const p = DATA.photos[key];
     const d = document.createElement("div");
     d.className = "polaroid";
-    d.innerHTML = `<img src="${p.src}" alt=""><div class="cap hand">${p.cap}</div>`;
+    if (key.startsWith("video:")) {
+      const v = DATA.videos[key.slice(6)];
+      d.innerHTML = `<video src="${v.src}" controls playsinline preload="metadata"></video><div class="cap hand">${v.cap}</div>`;
+    } else {
+      const p = DATA.photos[key];
+      d.innerHTML = `<img src="${p.src}" alt=""><div class="cap hand">${p.cap}</div>`;
+    }
     return d;
   }
 
@@ -701,14 +706,14 @@
     let n = 9, tapped = 0;
     const EMO = ["🎆", "🎇", "✨", "🌟", "💥"];
     const spots = scatterPositions();
-    for (let i = 9; i >= 1; i--) {
+    for (let k = 9; k >= 1; k--) {
       const b = document.createElement("button");
       b.className = "tap-heart";
-      b.textContent = EMO[i % EMO.length];
-      b.style.left = `${spots[i - 1].left}%`;
-      b.style.top = `${spots[i - 1].top}%`;
+      b.textContent = EMO[k % EMO.length];
+      b.style.left = `${spots[k - 1].left}%`;
+      b.style.top = `${spots[k - 1].top}%`;
       b.style.animationDelay = `${Math.random() * 2}s`;
-      b.dataset.n = i;
+      b.dataset.n = k;
       b.addEventListener("click", () => {
         if (b.classList.contains("popped")) return;
         b.classList.add("popped");
@@ -878,9 +883,15 @@
       $("#statHearts").textContent = state.hearts;
       $("#statLevels").textContent = DATA.levels.length;
       $("#statPhotos").textContent = Object.keys(DATA.photos).length;
-      // video
-      $("#finaleVideo").src = DATA.finale.video;
-      $("#videoCap").textContent = DATA.finale.videoCap;
+      // bonus scenes
+      const scenes = $("#bonusScenes");
+      scenes.innerHTML = "";
+      DATA.finale.bonusScenes.forEach(s => {
+        const wrap = document.createElement("div");
+        wrap.className = "bonus-scene";
+        wrap.innerHTML = `<video src="${s.src}" controls playsinline preload="metadata"></video><p class="hand">${s.cap}</p>`;
+        scenes.appendChild(wrap);
+      });
       // gallery
       const g = $("#gallery");
       g.innerHTML = "";

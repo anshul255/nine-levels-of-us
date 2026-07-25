@@ -26,7 +26,9 @@ const DATA = {
     earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · Winter shopping — one hat, one pair of earmuffs, zero regrets" },
     winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago winter tried. We won. ❄️" },
     neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Glow crew of two 💡" },
+    friendsgiving: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · Friendsgiving — our people, our kind of chaos 🦃" },
     nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · Ending the year under a giant ornament 🎆" },
+    nye2:       { src: "photos/IMG_2643.jpg", cap: "One ornament, two of us ✨" },
     lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour at the Lakefill 🌅" },
     lakeside1:  { src: "photos/IMG_4629.jpg", cap: "Jun 5 · Lake days with you >" },
     lakeside2:  { src: "photos/IMG_4645.jpg", cap: "Same lake, favourite company" },
@@ -37,6 +39,11 @@ const DATA = {
     graduation: { src: "photos/IMG_4702.jpg", cap: "Jun 7 · MBA: UNLOCKED. Kellogg, Class of 2026 🎓" },
     gradSelfie1:{ src: "photos/IMG_4711.jpg", cap: "So proud of you." },
     gradSelfie2:{ src: "photos/IMG_4715.jpg", cap: "My favourite graduate" }
+  },
+
+  // Video memories — referenced from levels as "video:<key>".
+  videos: {
+    midnight: { src: "video/midnight.mp4", cap: "12:08 AM · Our first minutes of 2026 🎆" }
   },
 
   // Level definitions — 9 chapters + a final boss, in true chronological order.
@@ -62,7 +69,7 @@ const DATA = {
     {
       month: "November 2 '25", title: "Date Night",
       game: "quiz",
-      intro: "A little quiz. Don't worry — with us, every answer is a good one.",
+      intro: "A little quiz — about you, me, and us. Every answer is a good one.",
       reveals: ["dateNight1", "dateNight2"]
     },
     {
@@ -72,16 +79,16 @@ const DATA = {
       reveals: ["winter"]
     },
     {
-      month: "November 11 '25", title: "Glow Up",
+      month: "November 11–29 '25", title: "Glow Up",
       game: "catch",
-      intro: "Neon lights, glow bands, us. Catch 12 falling hearts before they hit the floor.",
-      reveals: ["neon"]
+      intro: "Neon nights, Friendsgiving with the crew — November kept glowing. Catch 12 falling hearts before they hit the floor.",
+      reveals: ["neon", "friendsgiving"]
     },
     {
       month: "New Year's Eve '25", title: "Midnight Countdown",
       game: "countdown",
       intro: "We closed out 2025 under a sky full of lights. Tap the fireworks to count down to midnight!",
-      reveals: ["nye"]
+      reveals: ["nye", "nye2", "video:midnight"]
     },
     {
       month: "May–June '26", title: "Golden Hour",
@@ -92,7 +99,7 @@ const DATA = {
     {
       month: "June 7 '26", title: "Graduation Day",
       game: "story",
-      intro: "The big one. Player 2 did the thing. 🎓",
+      intro: "The big one. Preksha did the thing. 🎓",
       reveals: []
     },
     {
@@ -109,27 +116,27 @@ const DATA = {
   // Level 5 — the scratch card image (frost-covered surprise).
   scratchCard: "earmuffs",
 
-  // Level 4 — quiz. Every question is winnable; wrong answers get a playful retry.
+  // Level 4 — quiz, written from Anshul to Preksha. correct: -1 means every answer is right.
   quiz: [
     {
-      q: "Where did Player 2 just earn her MBA?",
-      options: ["Kellogg School of Management", "Hogwarts School of Business", "The University of Winning Arguments"],
-      correct: 0,
-      right: "Correct! Northwestern Kellogg, Class of 2026 💜",
-      wrong: "Tempting… but try again 😄"
-    },
-    {
-      q: "What is the official power move of this couple?",
-      options: ["Matching outfits", "Eating off each other's plates", "Photoshoots at every landmark"],
+      q: "Where do I feel most at home?",
+      options: ["Wherever you are", "Anywhere, as long as you're there", "With you. Obviously."],
       correct: -1,
-      right: "Correct. All of the above, always. ✅",
+      right: "Exactly. You're my favourite place. ❤️",
       wrong: ""
     },
     {
-      q: "On a scale of 1 to 10, how lucky is Anshul?",
-      options: ["10", "100", "∞"],
+      q: "When does my heart still skip a beat?",
+      options: ["When you laugh at my jokes", "When you look at me like that", "Every time you walk into the room"],
       correct: -1,
-      right: "Mathematically verified. ♾️",
+      right: "All of the above. It has never once recovered. 💓",
+      wrong: ""
+    },
+    {
+      q: "What have these nine months really been?",
+      options: ["The happiest of my life", "The easiest yes I've ever said", "Just the beginning"],
+      correct: -1,
+      right: "Correct, correct, and correct. ✨",
       wrong: ""
     }
   ],
@@ -153,8 +160,10 @@ const DATA = {
     question: "Preksha, will you keep playing this co-op game with me… forever?",
     yes: "YES ♥",
     no: "no",
-    video: "video/our-moment.mp4",
-    videoCap: "May '26 · Just us being us 🎬",
+    bonusScenes: [
+      { src: "video/our-moment.mp4", cap: "May '26 · Just us being us 🎬" },
+      { src: "video/midnight.mp4", cap: "Jan 1 · Midnight, fireworks, you 🎆" }
+    ],
     letter: [
       "Dear Preksha,",
       "Nine months ago you pressed start on this game with me, and every single level since has been my favourite one.",

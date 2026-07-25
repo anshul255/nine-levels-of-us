@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;500;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
   <canvas id="stars"></canvas>
@@ -87,9 +87,8 @@
           <div class="stat"><div class="num" id="statPhotos">–</div><div class="lbl">memories unlocked</div></div>
         </div>
 
-        <p class="pixel section-title">BONUS SCENE</p>
-        <video id="finaleVideo" controls playsinline preload="metadata"></video>
-        <p class="hand" id="videoCap" style="font-size:20px;color:var(--pink2)"></p>
+        <p class="pixel section-title">BONUS SCENES</p>
+        <div id="bonusScenes"></div>
 
         <p class="pixel section-title">MEMORY VAULT</p>
         <div id="gallery"></div>
@@ -109,7 +108,7 @@
   <!-- LIGHTBOX -->
   <div id="lightbox"><img src="" alt=""><p class="hand" id="lightboxCap"></p></div>
 
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/data.js?v=2"></script>
+  <script src="js/app.js?v=2"></script>
 </body>
 </html>

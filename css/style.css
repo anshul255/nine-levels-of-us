@@ -258,7 +258,7 @@ button {
   box-shadow: 0 12px 30px var(--shadow);
   transform: rotate(var(--rot, -2deg));
 }
-.polaroid img { width: 100%; display: block; border-radius: 3px; }
+.polaroid img, .polaroid video { width: 100%; display: block; border-radius: 3px; }
 .polaroid .cap { font-size: 21px; text-align: center; margin-top: 10px; line-height: 1.15; }
 
 /* reveal overlay */
@@ -314,7 +314,9 @@ button {
 .stat .num { font-size: 22px; font-weight: 800; color: var(--gold); }
 .stat .lbl { font-size: 12px; opacity: 0.75; margin-top: 4px; }
 
-#finaleVideo { width: 100%; max-width: 420px; border-radius: 14px; box-shadow: 0 12px 30px var(--shadow); }
+#bonusScenes { display: flex; flex-direction: column; gap: 22px; width: 100%; max-width: 420px; }
+.bonus-scene video { width: 100%; border-radius: 14px; box-shadow: 0 12px 30px var(--shadow); }
+.bonus-scene p { font-size: 20px; color: var(--pink2); text-align: center; margin-top: 8px; }
 
 #gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; max-width: 460px; }
 #gallery img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; }
