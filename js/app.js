@@ -255,10 +255,22 @@
   function ping(freq = 880) { music.blip(freq); }
 
   /* ---------- boot ---------- */
-  function initBoot() {
+  function renderDayCounter() {
     const start = new Date(DATA.startDate + "T00:00:00");
-    const days = Math.max(1, Math.floor((Date.now() - start.getTime()) / 86400000) + 1);
-    $("#dayCounter").innerHTML = `Day <b>${days}</b> of us`;
+    const now = new Date();
+    const days = Math.max(1, Math.floor((now - start) / 86400000) + 1);
+    let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+    let anchor = new Date(start);
+    anchor.setMonth(start.getMonth() + months);
+    if (anchor > now) { months--; anchor = new Date(start); anchor.setMonth(start.getMonth() + months); }
+    const extra = Math.floor((now - anchor) / 86400000);
+    $("#dayCounter").innerHTML = months >= 1
+      ? `Day <b>${days}</b> of us — <b>${months}</b> month${months === 1 ? "" : "s"}${extra > 0 ? `, <b>${extra}</b> day${extra === 1 ? "" : "s"}` : ""} and counting ♥`
+      : `Day <b>${days}</b> of us — and counting ♥`;
+  }
+  function initBoot() {
+    renderDayCounter();
+    setInterval(renderDayCounter, 60000);   // stays current even if the tab lives past midnight
     $("#p1name").textContent = `P1: ${DATA.player1.toUpperCase()}`;
     $("#p2name").textContent = `P2: ${DATA.player2.toUpperCase()}`;
     // saved progress → offer continue or a clean start
@@ -882,7 +894,75 @@
     render();
   };
 
-  /* ----- 9. graduation story ----- */
+  /* ----- 9. graduation: move the tassel, then toss the cap ----- */
+  GAMES.gradcap = (i) => {
+    const tok = state.token;
+    const area = $("#gameArea");
+    area.innerHTML = `
+      <div id="gradField">
+        <div id="gradCap">🎓</div>
+        <div id="gradTassel"></div>
+      </div>`;
+    const field = $("#gradField"), cap = $("#gradCap"), tassel = $("#gradTassel");
+    let stage = 1;
+    $("#gameMsg").textContent = "Drag the golden tassel across to the other side ✨";
+
+    // stage 1 — drag the tassel right-to-left across the cap
+    let dragging = false, startX = 0, tx = 0;
+    tassel.addEventListener("pointerdown", (e) => {
+      if (stage !== 1) return;
+      dragging = true;
+      startX = e.clientX - tx;
+      try { tassel.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    tassel.addEventListener("pointermove", (e) => {
+      if (!dragging || stage !== 1) return;
+      tx = Math.min(0, e.clientX - startX);       // leftward only
+      tassel.style.transform = `translateX(${tx}px)`;
+      if (tx < -(field.clientWidth * 0.42)) {
+        stage = 2; dragging = false;
+        tassel.classList.add("done");
+        ping(950); addHeart(2);
+        confetti.burst(40);
+        $("#gameMsg").textContent = "Official! Now swipe UP to toss the cap! 🎉";
+      }
+    });
+    tassel.addEventListener("pointerup", () => {
+      dragging = false;
+      if (stage === 1) { tx = 0; tassel.style.transform = ""; }   // snap back
+    });
+
+    // stage 2 — swipe up anywhere to toss
+    let sy = null;
+    field.addEventListener("pointerdown", (e) => { if (stage === 2) sy = e.clientY; });
+    field.addEventListener("pointerup", (e) => {
+      if (stage !== 2 || sy === null) return;
+      const dy = e.clientY - sy;
+      sy = null;
+      if (dy < -50) {
+        stage = 3;
+        cap.classList.add("tossed");
+        ping(1150); addHeart(3);
+        confetti.burst(150);
+        for (let k = 0; k < 10; k++) {
+          const s = document.createElement("span");
+          s.className = "cap-rain";
+          s.textContent = "🎓";
+          s.style.left = `${5 + Math.random() * 88}%`;
+          s.style.animationDelay = `${0.3 + Math.random() * 1.2}s`;
+          field.appendChild(s);
+        }
+        $("#gameMsg").textContent = "MBA: officially official! 🎓✨";
+        setTimeout(() => confetti.burst(100), 700);
+        setTimeout(() => { if (tok === state.token) completeLevel(i); }, 2200);
+      } else {
+        ping(300);
+        $("#gameMsg").textContent = "Bigger! Swipe UP like you mean it 🎓";
+      }
+    });
+  };
+
+  /* ----- (kept for reference) photo story carousel ----- */
   GAMES.story = (i) => {
     const area = $("#gameArea");
     let idx = 0;

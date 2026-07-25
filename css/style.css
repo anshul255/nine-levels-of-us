@@ -243,6 +243,39 @@ button {
 .tile.correct-flash { border-color: var(--gold); }
 #puzzleRef { width: 74px; border-radius: 8px; opacity: 0.85; border: 2px solid var(--violet); margin-bottom: 10px; }
 
+/* graduation cap toss */
+#gradField {
+  position: relative; width: 100%; max-width: 380px; height: 380px;
+  touch-action: none; overflow: hidden;
+}
+#gradCap {
+  position: absolute; left: 50%; top: 38%;
+  transform: translate(-50%, -50%);
+  font-size: 120px; line-height: 1;
+  filter: drop-shadow(0 10px 24px var(--shadow));
+  transition: transform 0.9s cubic-bezier(0.3, -0.3, 0.5, 1), opacity 0.9s ease;
+}
+#gradCap.tossed { transform: translate(-50%, -600px) rotate(880deg); opacity: 0; }
+#gradTassel {
+  position: absolute; right: 10%; top: 22%;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffe6a3, var(--gold) 60%, #c98f1d);
+  box-shadow: 0 0 16px rgba(255, 209, 102, 0.65);
+  cursor: grab; touch-action: none;
+}
+#gradTassel::after {
+  content: ""; position: absolute; left: 50%; top: 100%;
+  width: 3px; height: 58px; transform: translateX(-50%);
+  background: linear-gradient(var(--gold), #c98f1d);
+  border-radius: 2px;
+}
+#gradTassel.done { filter: drop-shadow(0 0 14px var(--gold)); transition: transform 0.25s ease; }
+.cap-rain {
+  position: absolute; top: -44px; font-size: 30px; pointer-events: none;
+  animation: capFall 2.3s ease-in forwards;
+}
+@keyframes capFall { to { transform: translateY(460px) rotate(340deg); opacity: 0.9; } }
+
 /* story */
 #storyWrap { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 #storyWrap .polaroid { max-width: min(80vw, 330px); }

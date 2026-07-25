@@ -104,9 +104,9 @@ const DATA = {
     },
     {
       month: "June 7 '26", title: "Graduation Day",
-      game: "story",
-      intro: "The big one. Preksha did the thing. 🎓",
-      reveals: []
+      game: "gradcap",
+      intro: "The big one. Preksha did the thing. Make it official: move the tassel, then toss the cap.",
+      reveals: ["gradParty1", "gradParty2", "graduation", "gradSelfie1", "gradSelfie2"]
     },
     {
       month: "July 24 '26", title: "One Last Question", boss: true,
