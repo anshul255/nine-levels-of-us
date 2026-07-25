@@ -265,7 +265,7 @@
   }
 
   /* ---------- level map ---------- */
-  const BADGES = ["💘", "🎃", "🪔", "🥂", "❄️", "💡", "🎆", "🌅", "🎓", "👑"];
+  const BADGES = ["💘", "🎃", "🪔", "🎂", "❄️", "💡", "🎆", "🌅", "🎓", "👑"];
   function renderMap() {
     updateTopbar();
     const path = $("#path");
@@ -297,6 +297,14 @@
     state.token++;
     state.current = i;
     const lv = DATA.levels[i];
+    // priority-load everything this level shows
+    const priority = lv.reveals.filter(k => !k.startsWith("video:")).map(k => DATA.photos[k].src);
+    if (lv.game === "match") priority.push(...DATA.matchFaces.map(k => DATA.photos[k].src));
+    if (lv.game === "puzzle") priority.push(DATA.photos[DATA.puzzleImage].src);
+    if (lv.game === "scratch") priority.push(DATA.photos[DATA.scratchCard].src);
+    if (lv.game === "story") priority.push(...DATA.story.map(k => DATA.photos[k].src));
+    if (lv.game === "finale") priority.push(...DATA.finale.beach.map(k => DATA.photos[k].src));
+    warm(priority);
     $("#levelMonth").textContent = lv.month.toUpperCase();
     $("#levelTitle").textContent = lv.title;
     $("#levelIntro").textContent = lv.intro;
@@ -331,7 +339,7 @@
     d.className = "polaroid";
     if (key.startsWith("video:")) {
       const v = DATA.videos[key.slice(6)];
-      d.innerHTML = `<video src="${v.src}" controls playsinline preload="metadata"></video><div class="cap hand">${v.cap}</div>`;
+      d.innerHTML = `<video src="${v.src}" poster="${v.poster}" controls playsinline preload="none"></video><div class="cap hand">${v.cap}</div>`;
     } else {
       const p = DATA.photos[key];
       d.innerHTML = `<img src="${p.src}" alt=""><div class="cap hand">${p.cap}</div>`;
@@ -340,6 +348,33 @@
   }
 
   function addHeart(n = 1) { state.hearts += n; save(); updateTopbar(); }
+
+  /* ---------- image preloading ---------- */
+  const preloadedSrcs = new Set();
+  function warm(srcs) {
+    srcs.forEach(src => {
+      if (!src || preloadedSrcs.has(src)) return;
+      preloadedSrcs.add(src);
+      const im = new Image();
+      im.src = src;
+    });
+  }
+  // trickle-load every photo in the background (3 lanes) while she's on the title screen
+  function warmAll() {
+    const urls = Object.values(DATA.photos).map(p => p.src)
+      .filter(src => !preloadedSrcs.has(src));
+    let idx = 0;
+    function lane() {
+      if (idx >= urls.length) return;
+      const src = urls[idx++];
+      if (preloadedSrcs.has(src)) return lane();
+      preloadedSrcs.add(src);
+      const im = new Image();
+      im.onload = im.onerror = lane;
+      im.src = src;
+    }
+    lane(); lane(); lane();
+  }
 
   function skipBtnHandler() {
     if (state.current != null) { ping(500); completeLevel(state.current); }
@@ -695,47 +730,91 @@
     state.cleanup = () => { clearInterval(spawnTimer); cancelAnimationFrame(raf); };
   };
 
-  /* ----- 7. NYE countdown ----- */
+  /* ----- 7. NYE midnight clock — time your tap as the spark crosses 12 ----- */
   GAMES.countdown = (i) => {
     const tok = state.token;
     const area = $("#gameArea");
     area.innerHTML = `
       <div class="meter"><div id="cdMeter"></div></div>
-      <div id="heartField"></div>`;
-    const field = $("#heartField");
-    let n = 9, tapped = 0;
-    const EMO = ["🎆", "🎇", "✨", "🌟", "💥"];
-    const spots = scatterPositions();
-    for (let k = 9; k >= 1; k--) {
-      const b = document.createElement("button");
-      b.className = "tap-heart";
-      b.textContent = EMO[k % EMO.length];
-      b.style.left = `${spots[k - 1].left}%`;
-      b.style.top = `${spots[k - 1].top}%`;
-      b.style.animationDelay = `${Math.random() * 2}s`;
-      b.dataset.n = k;
-      b.addEventListener("click", () => {
-        if (b.classList.contains("popped")) return;
-        b.classList.add("popped");
-        ping(400 + (9 - n) * 90);
-        const lbl = document.createElement("span");
-        lbl.className = "heart-label";
-        lbl.textContent = n;
-        lbl.style.fontSize = "22px";
-        lbl.style.left = b.style.left; lbl.style.top = b.style.top;
-        field.appendChild(lbl);
-        n--; tapped++;
-        addHeart();
-        $("#cdMeter").style.width = `${(tapped / 9) * 100}%`;
-        if (tapped === 9) {
-          $("#gameMsg").textContent = "🎉 HAPPY NEW YEAR! 🎉";
-          confetti.burst(150);
-          setTimeout(() => { if (tok === state.token) completeLevel(i); }, 1200);
-        }
-      });
-      field.appendChild(b);
+      <canvas id="clockCanvas"></canvas>`;
+    const canvas = $("#clockCanvas"), ctx = canvas.getContext("2d");
+    const S = Math.min(320, area.clientWidth || 320);
+    canvas.width = S; canvas.height = S;
+    const C = S / 2, R = S / 2 - 26;
+    const HOURS = ["10 o'clock!", "11 o'clock!", "🎉 MIDNIGHT! HAPPY NEW YEAR! 🎉"];
+    let angle = Math.PI / 2;          // start at the bottom, sweep clockwise
+    let speed = 0.028, zone = 0.42;   // radians; zone tightens, spark speeds up
+    let hits = 0, raf = null, done = false, flashUntil = 0, missUntil = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, S, S);
+      // face
+      ctx.strokeStyle = "#3a4085"; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.arc(C, C, R, 0, 7); ctx.stroke();
+      // hour ticks
+      for (let t = 0; t < 12; t++) {
+        const a = t * Math.PI / 6;
+        ctx.strokeStyle = t === 0 ? "#ffd166" : "#2e3572";
+        ctx.lineWidth = t === 0 ? 4 : 2;
+        ctx.beginPath();
+        ctx.moveTo(C + Math.sin(a) * (R - 12), C - Math.cos(a) * (R - 12));
+        ctx.lineTo(C + Math.sin(a) * R, C - Math.cos(a) * R);
+        ctx.stroke();
+      }
+      // midnight sweet zone (top arc)
+      ctx.strokeStyle = Date.now() < flashUntil ? "#ffd166" : "rgba(255, 209, 102, 0.45)";
+      ctx.lineWidth = 10;
+      ctx.beginPath(); ctx.arc(C, C, R, -Math.PI / 2 - zone, -Math.PI / 2 + zone); ctx.stroke();
+      ctx.font = "22px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("🕛", C, C - R + 1);
+      // centre label
+      ctx.font = `700 ${S / 16}px Outfit, sans-serif`;
+      ctx.fillStyle = Date.now() < missUntil ? "#ff8fb0" : "#fdf6f0";
+      ctx.fillText(Date.now() < missUntil ? "almost!" : (hits === 0 ? "9 PM" : HOURS[hits - 1].replace(/[^0-9ao'clk ]/gi, "").trim() || "…"), C, C);
+      // spark hand
+      const hx = C + Math.cos(angle) * (R - 4), hy = C + Math.sin(angle) * (R - 4);
+      ctx.strokeStyle = "rgba(255, 92, 138, 0.55)"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(C, C); ctx.lineTo(hx, hy); ctx.stroke();
+      ctx.font = "26px serif";
+      ctx.fillText("✨", hx, hy);
+      if (!done) {
+        angle += speed;
+        canvas.dataset.angle = angle;    // read by tap handler; normalized there
+        raf = requestAnimationFrame(draw);
+      }
     }
-    $("#gameMsg").textContent = "Tap the fireworks: 9… 8… 7… (our way of counting)";
+    raf = requestAnimationFrame(draw);
+
+    function tap() {
+      if (done) return;
+      // angular distance from the top (-PI/2), normalized to [-PI, PI]
+      let d = ((angle - (-Math.PI / 2)) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+      if (d > Math.PI) d -= 2 * Math.PI;
+      if (Math.abs(d) <= zone) {
+        hits++;
+        flashUntil = Date.now() + 400;
+        ping(600 + hits * 150); addHeart(3);
+        confetti.burst(60, { x: innerWidth * (0.25 + Math.random() * 0.5), y: innerHeight * 0.25 });
+        $("#cdMeter").style.width = `${(hits / 3) * 100}%`;
+        $("#gameMsg").textContent = HOURS[hits - 1];
+        if (hits >= 3) {
+          done = true;
+          confetti.burst(160);
+          setTimeout(() => confetti.burst(120), 500);
+          setTimeout(() => { if (tok === state.token) completeLevel(i); }, 1400);
+        } else {
+          speed += 0.012; zone = Math.max(0.3, zone - 0.06);
+          angle = Math.PI / 2;           // restart sweep from the bottom
+        }
+      } else {
+        missUntil = Date.now() + 550;
+        ping(220);
+        $("#gameMsg").textContent = "So close! Tap right as the spark crosses 12 🕛";
+      }
+    }
+    canvas.addEventListener("pointerdown", tap);
+    $("#gameMsg").textContent = "Tap when the spark reaches midnight! 🕛";
+    state.cleanup = () => { done = true; cancelAnimationFrame(raf); };
   };
 
   /* ----- 8. tile puzzle (tap two tiles to swap) ----- */
@@ -889,7 +968,7 @@
       DATA.finale.bonusScenes.forEach(s => {
         const wrap = document.createElement("div");
         wrap.className = "bonus-scene";
-        wrap.innerHTML = `<video src="${s.src}" controls playsinline preload="metadata"></video><p class="hand">${s.cap}</p>`;
+        wrap.innerHTML = `<video src="${s.src}" poster="${s.poster}" controls playsinline preload="none"></video><p class="hand">${s.cap}</p>`;
         scenes.appendChild(wrap);
       });
       // gallery
@@ -931,6 +1010,7 @@
       try { localStorage.removeItem(STORE_KEY); } catch (e) {}
       location.reload();
     });
+    setTimeout(warmAll, 1200);
   }
 
   document.addEventListener("DOMContentLoaded", init);

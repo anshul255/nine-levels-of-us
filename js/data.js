@@ -27,12 +27,12 @@ const DATA = {
     diwali1:    { src: "photos/IMG_2028.jpg", cap: "Nov 1 · New festival, same favourite person 🪔" },
     diwali2:    { src: "photos/IMG_2030.jpg", cap: "Every diya in the city was jealous of your glow 💚" },
     diwali3:    { src: "photos/IMG_2037.jpg", cap: "The mirror agreed: we make sense together" },
-    dateNight1: { src: "photos/IMG_2072.jpg", cap: "Nov 2 · You in sequins, me in awe (and a hoodie)" },
-    dateNight2: { src: "photos/IMG_2074.jpg", cap: "Date night, dressed by two different stylists" },
+    bday1: { src: "photos/IMG_2072.jpg", cap: "Nov 2 · Birthday girl in sequins ✨ (I was the one getting the gift)" },
+    bday2: { src: "photos/IMG_2074.jpg", cap: "Your first birthday with me — celebrating you came easy 🎂" },
     earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · One silly hat, one pair of earmuffs, zero regrets" },
     winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago turned cold. You kept me warm. ❄️" },
     neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Even under blacklight, you glowed brightest 💡" },
-    friendsgiving: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · Friendsgiving — our people, our kind of chaos 🦃" },
+    bdaySurprise: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · My birthday — you secretly planned it all. Tiara mandatory. 👑" },
     nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · The year ended exactly where I belonged — next to you 🎆" },
     nye2:       { src: "photos/IMG_2643.jpg", cap: "One ornament, two of us ✨" },
     lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour had competition 🌅" },
@@ -49,7 +49,7 @@ const DATA = {
 
   // Video memories — referenced from levels as "video:<key>".
   videos: {
-    midnight: { src: "video/midnight.mp4", cap: "12:08 AM · Fireworks above, you in my arms 🎆" }
+    midnight: { src: "video/midnight.mp4", poster: "video/midnight-poster.jpg", cap: "12:08 AM · Fireworks above, you in my arms 🎆" }
   },
 
   // Level definitions — 9 chapters + a final boss, in true chronological order.
@@ -73,10 +73,10 @@ const DATA = {
       reveals: ["diwali1", "diwali2", "diwali3"]
     },
     {
-      month: "November 2 '25", title: "Date Night",
+      month: "November 2 '25", title: "Birthday Girl",
       game: "quiz",
-      intro: "A little quiz — about you, me, and us. Every answer is a good one.",
-      reveals: ["dateNight1", "dateNight2"]
+      intro: "Halloween, then Diwali, then the real celebration — your birthday. A little quiz, about you, me, and us. Every answer is a good one.",
+      reveals: ["bday1", "bday2"]
     },
     {
       month: "November 7–10 '25", title: "Winter Mode",
@@ -87,8 +87,8 @@ const DATA = {
     {
       month: "November 11–29 '25", title: "Glow Up",
       game: "catch",
-      intro: "Neon nights, Friendsgiving with the crew — November kept glowing. Catch 12 falling hearts before they hit the floor.",
-      reveals: ["neon", "friendsgiving"]
+      intro: "Neon nights — and then the surprise party you secretly threw for my birthday. November kept glowing. Catch 12 falling hearts before they hit the floor.",
+      reveals: ["neon", "bdaySurprise"]
     },
     {
       month: "New Year's Eve '25", title: "Midnight Countdown",
@@ -167,13 +167,13 @@ const DATA = {
     yes: "YES ♥",
     no: "no",
     bonusScenes: [
-      { src: "video/our-moment.mp4", cap: "May '26 · Just us being us 🎬" },
-      { src: "video/midnight.mp4", cap: "Jan 1 · Midnight, fireworks, you 🎆" }
+      { src: "video/our-moment.mp4", poster: "video/our-moment-poster.jpg", cap: "May '26 · Just us being us 🎬" },
+      { src: "video/midnight.mp4", poster: "video/midnight-poster.jpg", cap: "Jan 1 · Midnight, fireworks, you 🎆" }
     ],
     letter: [
       "Dear Preksha,",
       "Nine months ago you pressed start on this game with me, and every single level since has been my favourite one.",
-      "Thank you — for our first Halloween in matching scars, for lighting up Diwali with me the very next morning, for ridiculous hats in department stores, for dancing under neon lights and counting down to midnight beneath the fireworks. And for that June evening when you walked across the Kellogg stage in purple, and I got to be the loudest one cheering.",
+      "Thank you — for our first Halloween in matching scars, for lighting up Diwali with me the very next morning, for letting me celebrate your birthday the day after that, for the surprise party you secretly threw for mine, for ridiculous hats in department stores, for dancing under neon lights and counting down to midnight beneath the fireworks. And for that June evening when you walked across the Kellogg stage in purple, and I got to be the loudest one cheering.",
       "I don't know what I did to deserve these nine months, but I know how lucky they've made me. You turn ordinary Tuesdays into boss-level victories. You are my favourite notification, my best decision, my whole heart.",
       "Happy nine months, my love. Thank you for every single day of them.",
       "— Anshul ♥"
