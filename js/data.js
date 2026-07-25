@@ -13,29 +13,29 @@ const DATA = {
 
   // Photo captions — path is relative to the site root.
   photos: {
-    festive1:   { src: "photos/IMG_1995.jpg", cap: "Oct 29 · Festive lights, brand-new sparks ✨" },
-    hallow1:    { src: "photos/IMG_2003.jpg", cap: "Oct 31 · All black, all in 🖤" },
+    festive1:   { src: "photos/IMG_1995.jpg", cap: "Oct 29 · The lights were beautiful. I was looking at you. ✨" },
+    hallow1:    { src: "photos/IMG_2003.jpg", cap: "Oct 31 · Dressed in black, falling anyway 🖤" },
     hallow2:    { src: "photos/IMG_2008.jpg", cap: "Blurry photo, crystal-clear feelings" },
     hallow3:    { src: "photos/IMG_2009.jpg", cap: "Halloween night, holding on tight" },
-    halloween:  { src: "photos/IMG_2020.jpg", cap: "Our first Halloween — matching battle scars 🎃" },
-    diwali1:    { src: "photos/IMG_2028.jpg", cap: "Nov 1 · Desi mode: activated 🪔" },
-    diwali2:    { src: "photos/IMG_2030.jpg", cap: "That green though 💚" },
-    diwali3:    { src: "photos/IMG_2037.jpg", cap: "Mirror check: passed" },
-    dateNight1: { src: "photos/IMG_2072.jpg", cap: "Nov 2 · Sequins + hoodie = perfect balance ⚖️" },
+    halloween:  { src: "photos/IMG_2020.jpg", cap: "Our first Halloween — fake scars, real butterflies 🎃" },
+    diwali1:    { src: "photos/IMG_2028.jpg", cap: "Nov 1 · New festival, same favourite person 🪔" },
+    diwali2:    { src: "photos/IMG_2030.jpg", cap: "Every diya in the city was jealous of your glow 💚" },
+    diwali3:    { src: "photos/IMG_2037.jpg", cap: "The mirror agreed: we make sense together" },
+    dateNight1: { src: "photos/IMG_2072.jpg", cap: "Nov 2 · You in sequins, me in awe (and a hoodie)" },
     dateNight2: { src: "photos/IMG_2074.jpg", cap: "Date night, dressed by two different stylists" },
-    earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · Winter shopping — one hat, one pair of earmuffs, zero regrets" },
-    winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago winter tried. We won. ❄️" },
-    neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Glow crew of two 💡" },
+    earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · One silly hat, one pair of earmuffs, zero regrets" },
+    winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago turned cold. You kept me warm. ❄️" },
+    neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Even under blacklight, you glowed brightest 💡" },
     friendsgiving: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · Friendsgiving — our people, our kind of chaos 🦃" },
-    nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · Ending the year under a giant ornament 🎆" },
+    nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · The year ended exactly where I belonged — next to you 🎆" },
     nye2:       { src: "photos/IMG_2643.jpg", cap: "One ornament, two of us ✨" },
-    lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour at the Lakefill 🌅" },
-    lakeside1:  { src: "photos/IMG_4629.jpg", cap: "Jun 5 · Lake days with you >" },
-    lakeside2:  { src: "photos/IMG_4645.jpg", cap: "Same lake, favourite company" },
-    beach1:     { src: "photos/IMG_4653.jpg", cap: "Jun 6 · Beach day ☀️" },
+    lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour had competition 🌅" },
+    lakeside1:  { src: "photos/IMG_4629.jpg", cap: "Jun 5 · The lake was pretty. You were prettier." },
+    lakeside2:  { src: "photos/IMG_4645.jpg", cap: "My favourite view was never the water" },
+    beach1:     { src: "photos/IMG_4653.jpg", cap: "Jun 6 · Sunshine, sand, and you — a perfect day ☀️" },
     beach2:     { src: "photos/IMG_4661.jpg", cap: "Lake Michigan, but the view is you" },
-    gradParty1: { src: "photos/IMG_4672.jpg", cap: "Grad-party eve, all white 🤍" },
-    gradParty2: { src: "photos/IMG_4676.jpg", cap: "Celebration mode" },
+    gradParty1: { src: "photos/IMG_4672.jpg", cap: "The night before your big day — I couldn't stop smiling 🤍" },
+    gradParty2: { src: "photos/IMG_4676.jpg", cap: "Celebrating you comes naturally" },
     graduation: { src: "photos/IMG_4702.jpg", cap: "Jun 7 · MBA: UNLOCKED. Kellogg, Class of 2026 🎓" },
     gradSelfie1:{ src: "photos/IMG_4711.jpg", cap: "So proud of you." },
     gradSelfie2:{ src: "photos/IMG_4715.jpg", cap: "My favourite graduate" }
@@ -43,7 +43,7 @@ const DATA = {
 
   // Video memories — referenced from levels as "video:<key>".
   videos: {
-    midnight: { src: "video/midnight.mp4", cap: "12:08 AM · Our first minutes of 2026 🎆" }
+    midnight: { src: "video/midnight.mp4", cap: "12:08 AM · Fireworks above, you in my arms 🎆" }
   },
 
   // Level definitions — 9 chapters + a final boss, in true chronological order.
@@ -145,7 +145,7 @@ const DATA = {
   scramble: [
     { word: "DIWALI",  hint: "Festival of lights — and of us dressing up 🪔" },
     { word: "CHICAGO", hint: "The city where our story lives" },
-    { word: "FOREVER", hint: "The plan, roughly speaking" }
+    { word: "GRATEFUL", hint: "How you make me feel, every single day" }
   ],
 
   // Level 8 — tile puzzle image.
@@ -157,7 +157,7 @@ const DATA = {
   // Final boss.
   finale: {
     beach: ["beach1", "beach2"],
-    question: "Preksha, will you keep playing this co-op game with me… forever?",
+    question: "Preksha, do you know how lucky I am to have you in my life?",
     yes: "YES ♥",
     no: "no",
     bonusScenes: [
@@ -167,9 +167,9 @@ const DATA = {
     letter: [
       "Dear Preksha,",
       "Nine months ago you pressed start on this game with me, and every single level since has been my favourite one.",
-      "We did our first Halloween in matching scars, lit up Diwali the very next morning, wore ridiculous hats in department stores, danced under neon lights, and counted down to a new year beneath a sky of fairy lights. Then summer came, and I watched you walk across that Kellogg stage in purple — and I have never been prouder to be Player 1 beside you.",
-      "You make ordinary Tuesdays feel like boss-level victories. You are my favourite notification, my best decision, my whole heart.",
-      "Here's to month ten, and the infinite levels after it. I love you.",
+      "Thank you — for our first Halloween in matching scars, for lighting up Diwali with me the very next morning, for ridiculous hats in department stores, for dancing under neon lights and counting down to midnight beneath the fireworks. And for that June evening when you walked across the Kellogg stage in purple, and I got to be the loudest one cheering.",
+      "I don't know what I did to deserve these nine months, but I know how lucky they've made me. You turn ordinary Tuesdays into boss-level victories. You are my favourite notification, my best decision, my whole heart.",
+      "Happy nine months, my love. Thank you for every single day of them.",
       "— Anshul ♥"
     ]
   }

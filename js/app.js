@@ -258,7 +258,7 @@
   function initBoot() {
     const start = new Date(DATA.startDate + "T00:00:00");
     const days = Math.max(1, Math.floor((Date.now() - start.getTime()) / 86400000) + 1);
-    $("#dayCounter").innerHTML = `Day <b>${days}</b> of forever`;
+    $("#dayCounter").innerHTML = `Day <b>${days}</b> of us`;
     $("#p1name").textContent = `P1: ${DATA.player1.toUpperCase()}`;
     $("#p2name").textContent = `P2: ${DATA.player2.toUpperCase()}`;
     $("#pressStart").addEventListener("click", () => { music.start(); ping(660); show("#map"); renderMap(); });
