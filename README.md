@@ -1,8 +1,8 @@
-# Player 2 Forever 💘
+# Nine Levels of Us 💘
 
-A tiny arcade built for Preksha — nine months of us, as a game.
+Nine months. Nine levels. One story. A tiny arcade built for Preksha.
 
-**Play it:** https://anshul255.github.io/player-2-forever/
+**Play it:** https://anshul255.github.io/nine-levels-of-us/
 
 Nine chronological levels (Halloween '25 → Kellogg graduation '26), each a mini-game
 that unlocks real photo memories, ending with a final boss question, a letter,
