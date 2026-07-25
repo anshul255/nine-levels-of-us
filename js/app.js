@@ -265,7 +265,7 @@
   }
 
   /* ---------- level map ---------- */
-  const BADGES = ["💘", "🎃", "🪔", "🎂", "❄️", "💡", "🎆", "🌅", "🎓", "👑"];
+  const BADGES = ["💘", "🎃", "🪔", "🎂", "❄️", "💡", "🎆", "🌅", "🎓", "💌"];
   function renderMap() {
     updateTopbar();
     const path = $("#path");
@@ -282,7 +282,7 @@
         <span class="badge">${done ? "⭐" : current ? BADGES[i] : "🔒"}</span>
         <span class="meta">
           <span class="month pixel">${lv.month.toUpperCase()}</span>
-          <span class="title">${lv.boss ? "👾 " : ""}${lv.title}</span>
+          <span class="title">${lv.boss ? "💌 " : ""}${lv.title}</span>
         </span>`;
       if (!current && !done) b.disabled = true;
       b.addEventListener("click", () => openLevel(i));

@@ -109,9 +109,9 @@ const DATA = {
       reveals: []
     },
     {
-      month: "July 24 '26", title: "Final Boss", boss: true,
+      month: "July 24 '26", title: "One Last Question", boss: true,
       game: "finale",
-      intro: "After nine months… one question remains.",
+      intro: "After nine months of us… I have one more question.",
       reveals: []
     }
   ],
@@ -172,10 +172,11 @@ const DATA = {
     ],
     letter: [
       "Dear Preksha,",
-      "Nine months ago you pressed start on this game with me, and every single level since has been my favourite one.",
-      "Thank you — for our first Halloween in matching scars, for lighting up Diwali with me the very next morning, for letting me celebrate your birthday the day after that, for the surprise party you secretly threw for mine, for ridiculous hats in department stores, for dancing under neon lights and counting down to midnight beneath the fireworks. And for that June evening when you walked across the Kellogg stage in purple, and I got to be the loudest one cheering.",
-      "I don't know what I did to deserve these nine months, but I know how lucky they've made me. You turn ordinary Tuesdays into boss-level victories. You are my favourite notification, my best decision, my whole heart.",
-      "Happy nine months, my love. Thank you for every single day of them.",
+      "Nine months ago, you pressed start on this game with me. I've been replaying every level since.",
+      "I think about our first Halloween — you drawing fake scars on our faces, laughing at how seriously I took mine. Waking up the next morning and lighting up Diwali together, you in that green, me forgetting whatever I was about to say. Your birthday the day after, when I learned that celebrating you might be my favourite thing in the world. And then you went and secretly planned a whole party for mine — balloons, banner, tiara, everything — and I understood, properly, what it feels like to be loved the way you love.",
+      "I think about the earmuffs we tried on and never bought. The neon night we glowed like fools. Standing under a giant glowing ornament while the year quietly ran out, and holding you at 12:08 with fireworks filling the sky. Golden hour at the Lakefill, lazy lake days, that beach afternoon — and the June evening you crossed the Kellogg stage in purple while I cheered so loudly that strangers turned around.",
+      "Here's the thing: none of these were big moments when they happened. They were just us. And that's what I love most — with you, 'just us' has always been more than enough.",
+      "Happy nine months, my love. Thank you for every single one of these days. I am so lucky it's you.",
       "— Anshul ♥"
     ]
   }
