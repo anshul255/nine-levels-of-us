@@ -261,6 +261,20 @@
     $("#dayCounter").innerHTML = `Day <b>${days}</b> of us`;
     $("#p1name").textContent = `P1: ${DATA.player1.toUpperCase()}`;
     $("#p2name").textContent = `P2: ${DATA.player2.toUpperCase()}`;
+    // saved progress → offer continue or a clean start
+    if (state.unlocked > 0 || state.hearts > 0) {
+      $("#pressStart").textContent = "▶ CONTINUE";
+      $("#restartBtn").style.display = "";
+      $("#restartBtn").addEventListener("click", () => {
+        try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+        state.unlocked = 0; state.hearts = 0;
+        music.start(); ping(660);
+        $("#restartBtn").style.display = "none";
+        $("#pressStart").textContent = "▶ PRESS START";
+        updateTopbar();
+        show("#map"); renderMap();
+      });
+    }
     $("#pressStart").addEventListener("click", () => { music.start(); ping(660); show("#map"); renderMap(); });
   }
 
