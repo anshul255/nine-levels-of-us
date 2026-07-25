@@ -43,7 +43,7 @@ const DATA = {
     gradParty1: { src: "photos/IMG_4672.jpg", cap: "The night before your big day — I couldn't stop smiling 🤍" },
     gradParty2: { src: "photos/IMG_4676.jpg", cap: "Celebrating you comes naturally" },
     graduation: { src: "photos/IMG_4702.jpg", cap: "Jun 7 · MBA: UNLOCKED. Kellogg, Class of 2026 🎓" },
-    gradSelfie1:{ src: "photos/IMG_4711.jpg", cap: "So proud of you." },
+    gradSelfie1:{ src: "photos/IMG_4716.jpg", cap: "So proud of you." },
     gradSelfie2:{ src: "photos/IMG_4715.jpg", cap: "My favourite graduate" }
   },
 
