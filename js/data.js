@@ -32,7 +32,7 @@ const DATA = {
     earmuffs:   { src: "photos/IMG_2106.jpg", cap: "Nov 7 · One silly hat, one pair of earmuffs, zero regrets" },
     winter:     { src: "photos/IMG_2130.jpg", cap: "Nov 10 · Chicago turned cold. You kept me warm. ❄️" },
     neon:       { src: "photos/IMG_2198.jpg", cap: "Nov 11 · Neon paint, silly grins, one unforgettable night 💡" },
-    bdaySurprise: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · My birthday — you secretly planned it all. Tiara mandatory. 👑" },
+    bdaySurprise: { src: "photos/IMG_2307.jpg", cap: "Nov 29 · My surprise party, your masterpiece. Tiara mandatory. 👑" },
     nye:        { src: "photos/IMG_2642.jpg", cap: "Dec 31 · The year ended exactly where I belonged — next to you 🎆" },
     nye2:       { src: "photos/IMG_2643.jpg", cap: "One ornament, two of us ✨" },
     lakefill1:  { src: "photos/IMG_4529.jpg", cap: "May 29 · Golden hour had competition 🌅" },
